@@ -5,8 +5,8 @@ import json
 import time
 DELAY = 1
 # change as per the need
-genre = 'war-politics'
-file_name = genre
+main_genre = 'thriller'
+file_name = main_genre
 
 
 BASE_URL = 'https://fmoviesgo.to/genre/'
@@ -27,7 +27,7 @@ proxies = []
 
 
 # soup for page number getting
-result = requests.get(f"{BASE_URL}{genre}")
+result = requests.get(f"{BASE_URL}{main_genre}")
 soup = BeautifulSoup(result.text, "html.parser")
 pg_number = soup.find_all('li', {'class': 'page-item'})
 pg_number = int(pg_number[-1].find('a')['href'].split('=')[1])
@@ -35,9 +35,9 @@ print(pg_number)
 
 for page in range(1, pg_number+1):
 
-    print(page)
     # main url request based on pagination
-    url = f"{BASE_URL}{genre}?page={page}"
+    url = f"{BASE_URL}{main_genre}?page={page}"
+    print(url)
     # result = requests.get(url, proxies=proxies[random.randint(0, len(ips))])
     result = requests.get(url)
 
