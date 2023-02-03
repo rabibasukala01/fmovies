@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 import random
 import json
 import time
-
+DELAY = 1
 # change as per the need
 genre = 'war-politics'
 file_name = genre
@@ -30,11 +30,14 @@ proxies = []
 result = requests.get(f"{BASE_URL}{genre}")
 soup = BeautifulSoup(result.text, "html.parser")
 pg_number = soup.find_all('li', {'class': 'page-item'})
-pg_number = pg_number[-1].find('a')['href'].split('=')[1]
+pg_number = int(pg_number[-1].find('a')['href'].split('=')[1])
+print(pg_number)
 
-for page in pg_number:
+for page in range(1, pg_number+1):
+
+    print(page)
     # main url request based on pagination
-    url = f"{BASE_URL}{genre}?page={pg_number}"
+    url = f"{BASE_URL}{genre}?page={page}"
     # result = requests.get(url, proxies=proxies[random.randint(0, len(ips))])
     result = requests.get(url)
 
@@ -81,9 +84,8 @@ for page in pg_number:
             'Released': released,
             'casts': actors
         }
-
         main.append(informations)
-        time.sleep(1)
+        time.sleep(DELAY)
 
 with open(f'{file_name}.json', 'w') as f:
     json.dump(main, f)
